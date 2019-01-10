@@ -1,5 +1,5 @@
 # Site settings
-baseurl = "http://jkmrto.com/"
+baseurl = "https://jkmrto.netlify.com/"
 languageCode = "en"
 title = "Jkmrto Web site"
 theme = "hugo-theme-cactus-plus"

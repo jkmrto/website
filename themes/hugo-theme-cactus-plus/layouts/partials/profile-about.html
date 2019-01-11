@@ -1,0 +1,9 @@
+<div class="profile">
+  <section id="wrapper-profile">
+      <header id="header-profile">
+          <a href='{{ with .Site.Params.avatarLink }}{{ . }}{{ else }}{{ .Site.BaseURL }}about{{ end }}'>
+              <img id="landscape" src="{{ .Site.BaseURL }}images/landscape.jpg"/>
+          </a>
+      </header>
+  </section>
+</div>

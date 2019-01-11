@@ -62,9 +62,9 @@ We will create the folder ```lib/cowboy_rest``` where submodules will be include
 
 At this point we can start working on Cowboy on the Web submodule. We will need:
 
-*   ```lib/cowboy_rest/web/supervisor```: This will be the Supervisor of the Web submodule, in carge of supervising the cowboy system.
+*   ```lib/cowboy_rest/web/supervisor```: This will be the Supervisor of the Web submodule, in charge of supervising the cowboy system.
 
-*  ```lib/cowboy_rest/http_listener```: This file will hold the roueing to the api Rest handlers. This will be also in charge of launching Cowboy Listener at start.
+*  ```lib/cowboy_rest/http_listener```: This file will keep the routing to the api Rest H. This will be also in charge of launching Cowboy Listener at start.
 
 * ```lib/cowboy_rest/rest_handler```: It is a Rest Handler in charge of handling and answering the incoming requests.
 

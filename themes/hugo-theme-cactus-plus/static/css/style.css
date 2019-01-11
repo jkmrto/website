@@ -134,7 +134,7 @@ h2 {
     color: #bbb;
 }
 
-.profile #wrapper {
+.profile  {
     padding: 60px 40px 0px;
     max-width: 600px;
     margin: 0 auto;
@@ -225,6 +225,13 @@ nav.main-nav a.cta {
     margin: 0 auto;
     padding: 60px 20px 100px 20px;
 }
+
+#wrapper-profile {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0px 0px 50px 0px;
+}
+
 
 #wrapper.home {
     max-width: 800px;
@@ -943,4 +950,14 @@ a.symbol:hover {
 
 #wrapper {
     text-align: left
+}
+
+#contact_image {
+
+    height: 200px; /* or larger */
+    width: 200px; /* or larger */
+}
+
+#send_button {
+    margin-top: 30px
 }

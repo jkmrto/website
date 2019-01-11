@@ -1,7 +1,7 @@
 # Site settings
 baseurl = "https://jkmrto.netlify.com/"
 languageCode = "en"
-title = "Jkmrto Web site"
+title = "Jkmrto Website"
 theme = "hugo-theme-cactus-plus"
 googleAnalytics = "your_google_analytics_id"
 # Set the value to true if your site include CJK (Chinese, Japanese, and Korean languages) characters

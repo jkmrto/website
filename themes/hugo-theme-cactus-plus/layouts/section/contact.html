@@ -1,10 +1,21 @@
 {{ partial "head.html" . }}
 <body>
 {{ partial "nav.html" . }}
-{{ partial "profile.html" . }}
 
-<section id="wrapper" class="home">
-    <textarea name="Text1" cols="40" rows="7"></textarea></section>
-</body>
+<div style="text-align:center">
+    <a href='{{ with .Site.Params.avatarLink }}{{ . }}{{ else }}{{ .Site.BaseURL }}about{{ end }}'>
+        <img id="contact_image" src="{{ .Site.BaseURL }}images/mail_image.png"/>
+    </a>
+    <div>
+        <textarea name="Text1" cols="40" rows="7"></textarea></section>
+    </div>
+    <div>
+        <button id="send_button" >Send</button>
+    </div>
+</div>
+
+  
+
+
 
 <script src="{{ .Site.BaseURL }}js/contact/contact.js"></script>

@@ -151,14 +151,11 @@ defmodule PostgameAnalyzer do
   end
 end
 
-``
+```
 
 
 Now if we run the application with ```iex -S mix``` and them request http:
 ```bash
 > curl localhost:4000/cowboy_rest/welcome
-Welcome to Postgame Analyzeer Bet Stream Service
-
-
-
+Welcome to Cowboy Rest Services
 ```

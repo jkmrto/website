@@ -3,8 +3,8 @@ date = "2015-06-20T14:02:37+02:00"
 title = "About"
 hidden = true
 +++
-
-I am a software engineer who emjoys coding. I am specially interested in parallel computing, distributed systems and functional programming.
+  
+I am a software engineer who emjoys coding. I am specially interested in parallel computing, distributed systems and functional programming. 
 
 The main aim on this website is keeping record of some of the issues that I have faced at work, so this could help to solve similar problems on the future. By the way, If this blog results helpful for someone it would be much more useful :)
 ***

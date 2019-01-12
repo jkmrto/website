@@ -13,7 +13,7 @@ weight: 10
 ---
 At Elixir world the well know framework **Phoenix** is the main tool to develop the client side interface in any project. This framework allows us to develop complex real-time web systems simplily with a lot of integrated features such as websockets. But in the case of just pretending to build a simple api Rest a good option is to use the **Cowboy** library, which makes quite more lightweight the final application than using Phoenix.
 
-In this post I will expose how to build a simple Rest Api Service with **Cowboy**.
+In this post I will expose how to build a simple Rest Api Service with **plug_cowboy**. This library makes even easier to user the **Cowboy** library, which is native from Erlang.
 
 
 Create New project with Elixir
@@ -26,7 +26,7 @@ Add cowboy dependency at ```mix.exs```
 ``` elixir
   defp deps do
     [
-      {:cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"}
     ]
   end
 ```
@@ -62,9 +62,103 @@ We will create the folder ```lib/cowboy_rest``` where submodules will be include
 
 At this point we can start working on Cowboy on the Web submodule. We will need:
 
-*   ```lib/cowboy_rest/web/supervisor```: This will be the Supervisor of the Web submodule, in charge of supervising the cowboy system.
+*   ```lib/cowboy_rest/web/supervisor```: The module defined in this file will be the Supervisor of the Web submodule. At start it will launch the ```http_listener``` that behaves as entrypoints for all the requests.
 
-*  ```lib/cowboy_rest/http_listener```: This file will keep the routing to the api Rest H. This will be also in charge of launching Cowboy Listener at start.
+```elixir
+defmodule CowboyRest.Web.Supervisor do
+  @moduledoc false
+  use Supervisor
+
+   def start_link(_arg, _opts) do
+     Supervisor.start_link(__MODULE__, [], [name: __MODULE__])
+   end
+
+   def init(_arg) do
+     children = [
+       worker(PostgameAnalyzer.Web.HttpListener, [[], []])
+     ]
+
+     supervise(children, strategy: :one_for_one)
+   end
+ end
+```
+
+*  ```lib/cowboy_rest/http_listener```: This file will keep the routing to the api Rest Handler functions. This will be also in charge of launching Cowboy Listener at start.
+
+
+```elixir
+defmodule CowboyRest.Web.HttpListener do
+  alias CowboyRest.Web.Handler
+  alias Plug.Cowboy
+  require Logger
+
+  def start_link(_state, _opts) do
+    Logger.info ("API Rest is working ...")
+    options = [
+      port: 4000,
+      dispatch: [ { host(), routes() } ],
+    ]
+    Cowboy.http(__MODULE__, [], options)
+  end
+
+  def host(), do: :_
+
+  def routes() do
+    [
+      {"/cowboy_rest/[...]", Cowboy.Handler, { Handler, [] }},
+    ]
+  end
+end
+```
 
 * ```lib/cowboy_rest/rest_handler```: It is a Rest Handler in charge of handling and answering the incoming requests.
 
+
+```elixir
+defmodule CowboyRest.Web.Handler do
+  use Plug.Router
+  require Logger
+
+  plug :match
+  plug :dispatch
+
+  @content_type_header_key    "content-type"
+  @html_header_value          "text/html"
+  @entrypoint                 "/cowboy_rest/"
+
+  get @entrypoint <> "/welcome" do
+    Plug.Conn.fetch_query_params(conn) # populates conn.params
+    |> put_resp_header(@content_type_header_key, @html_header_value)
+    |> send_resp(200, "Welcome to Postgame Analyzeer Bet Stream Service")
+  end
+
+ end
+```
+
+But in order to launch this submodule we need to launch our new Web supervisor from the application root, so the file ```ib/cowboy_rest.exs``` should look like this:
+
+```
+defmodule PostgameAnalyzer do
+  use Application
+
+  def start(_type, _args) do
+    children = [
+    # No childrent yet
+    ]
+
+    opts = [strategy: :one_for_one, name: PostgameAnalyzer.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+end
+
+``
+
+
+Now if we run the application with ```iex -S mix``` and them request http:
+```bash
+> curl localhost:4000/cowboy_rest/welcome
+Welcome to Postgame Analyzeer Bet Stream Service
+
+
+
+```

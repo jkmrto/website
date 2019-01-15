@@ -1,7 +1,7 @@
 ---
 author: "Juan Carlos Martinez de la Torre"
 date: 2019-01-014
-linktitle: api-rest-cowboy
+linktitle: go-in-action-summary
 menu:
   main:
     parent: tutorials

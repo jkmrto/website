@@ -65,6 +65,6 @@ As Master thesis I implemented a Convolution Neural Network
 based on VAE (Variational Autoencoder) for MRI and PET images reconstruction. It was
 developed in Python and TensorFlow.
 
-### [09/2011-09/2015] BSc in Telecommunications Enginering  (2011 - 2015)
+### [09/2011-09/2015] BSc in Telecommunications Engineering  (2011 - 2015)
 
 As Degree thesis I implemented a clustering algorithm in charge of identifying network traffic based on his package size. This project was developed in C.  

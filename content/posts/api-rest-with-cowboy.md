@@ -43,7 +43,7 @@ Let's use the ```lib/cowboy_rest.ex``` file as application entrypoint for superv
 
 And set ```lib/cowboy_rest.exs``` as an application module so his content will be:
 ``` Elixir
-defmodule PostgameAnalyzer do
+defmodule CowboyRest do
   use Application
 
   def start(_type, _args) do
@@ -51,7 +51,7 @@ defmodule PostgameAnalyzer do
     # No childrent yet
     ]
 
-    opts = [strategy: :one_for_one, name: PostgameAnalyzer.Supervisor]
+    opts = [strategy: :one_for_one, name: CowboyRest.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
@@ -75,7 +75,7 @@ defmodule CowboyRest.Web.Supervisor do
 
    def init(_arg) do
      children = [
-       worker(PostgameAnalyzer.Web.HttpListener, [[], []])
+       worker(CowboyRest.Web.HttpListener, [[], []])
      ]
 
      supervise(children, strategy: :one_for_one)
@@ -129,7 +129,7 @@ defmodule CowboyRest.Web.Handler do
   get @entrypoint <> "/welcome" do
     Plug.Conn.fetch_query_params(conn) # populates conn.params
     |> put_resp_header(@content_type_header_key, @html_header_value)
-    |> send_resp(200, "Welcome to Postgame Analyzeer Bet Stream Service")
+    |> send_resp(200, "Welcome to CowboyRest Service")
   end
 
  end
@@ -138,7 +138,7 @@ defmodule CowboyRest.Web.Handler do
 But in order to launch this submodule we need to launch our new Web supervisor from the application root, so the file ```ib/cowboy_rest.exs``` should look like this:
 
 ```
-defmodule PostgameAnalyzer do
+defmodule CowboyRest do
   use Application
 
   def start(_type, _args) do
@@ -146,7 +146,7 @@ defmodule PostgameAnalyzer do
     # No childrent yet
     ]
 
-    opts = [strategy: :one_for_one, name: PostgameAnalyzer.Supervisor]
+    opts = [strategy: :one_for_one, name: CowboyRest.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
@@ -159,3 +159,4 @@ Now if we run the application with ```iex -S mix``` and them request http:
 > curl localhost:4000/cowboy_rest/welcome
 Welcome to Cowboy Rest Services
 ```
+We can see how it is really easy to have a lightweigth API Rest application on elixir using Cowboy.

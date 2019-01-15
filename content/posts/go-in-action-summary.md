@@ -1,6 +1,6 @@
 ---
 author: "Juan Carlos Martinez de la Torre"
-date: 2019-01-014
+date: 2019-01-14
 linktitle: go-in-action-summary
 menu:
   main:

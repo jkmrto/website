@@ -42,13 +42,13 @@ The environment consists in a microservices architecture with more than 20 app c
 
 Some of the main project I have worked on: 
 
-* Analysis Project. This applicaction launches some Python analysis from Elixir when a trigger event happens. It requires to collect data from a RabbitMQ broadcast and save the data on ETS until the events happen. Using MongoDB to store the results. It includes the development of a simple client with Phoenix to expose the results.  
+* **Analysis Project**. This applicaction launches some Python analysis from Elixir when a trigger event happens. It requires to collect data from a RabbitMQ broadcast and save the data on ETS until the events happen. Using MongoDB to store the results. It includes the development of a simple client with Phoenix to expose the results.  
 
-* Like/Dislike System. This functionality includes realtime statistics to evaluate the opinion per each day. 
+* **Like/Dislike System**. This functionality includes realtime statistics to evaluate the opinion per each day. 
 
-* Analitics Service. Connecting to an external Api Rest to request some data analysis. 
+* **Analitics Service**. Connecting to an external Api Rest to request some data analysis. 
 
-* Database Data Exporter. Tool written in Python in charge of daily exporting and cleaning data from some internal database to an outside database, for later analysis. It allows to export data from Postgresql and MongoDB. 
+* **Database Data Exporter**. Tool written in Python in charge of daily exporting and cleaning data from some internal database to an outside database, for later analysis. It allows to export data from Postgresql and MongoDB. 
 
 <pre></pre>
 

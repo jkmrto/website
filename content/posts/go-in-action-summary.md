@@ -192,7 +192,157 @@ of its size, is copied and passed to the function.
 Slices are built around the concept of dynamic arrays that can grow and
 shrink as you see fit. 
 
-Slices are tiny objects that abstract and manipulate an underlying array.
+Slices are tiny objects that abstract and manipulate an underlying array. As an object it has three fields:
+ 1. a pointer to the underlying array, 
+ 2. the length or the number of elements the slice has access
+ 3. the capacity or the number of elements the slice has available for growth
 
 Slices give you all the benefits of indexing, iteration, and garbage collection optimizations
 because the underlying memory is allocated in contiguous blocks.
+
+##### Make and Slices 
+``` Go
+slice := make([]string, 5) // Contains a length and capacity of 5 elements.
+slice := make([]int, 3, 5) // Contains a length of 3 and has a capacity of 5.
+```
+When specifying ```capacity > length``` =>  you dont have to the underlying array access at first.
+
+```Go
+// Contains a length and capacity of 5 elements.
+slice := []string{"Red", "Blue", "Green", "Yellow", "Pink"}
+// Contains a length and capacity of 3 elements.
+slice := []int{10, 20, 30}
+```
+
+Declaration differences between arrays and slices. 
+```Go
+// Create an array of three integers.
+array := [3]int{10, 20, 30}
+// Create a slice of integers with a length and capacity of three.
+slice := []int{10, 20, 30}
+```
+
+##### Nil slice
+Used on exceptions or empty query results.
+```Go
+var slice []int
+slice := make([]int, 0)
+slice := []int{}
+```
+
+#### Taking Slice of a slice
+
+You need to remember that you now have two slices sharing the same underlying
+array. Changes made to the shared section of the underlying array by one slice can be
+seen by the other slice.
+
+```Go
+// Create a slice of integers.
+// Contains a length and capacity of 5 elements.
+slice := []int{10, 20, 30, 40, 50}
+// Create a new slice.
+// Contains a length of 2 and capacity of 4 elements.
+newSlice := slice[1:3]
+// Change index 1 of newSlice.
+// Change index 2 of the original slice.
+newSlice[1] = 35
+```
+
+#### Growing Slices
+
+1. **append** When there is more capacity to allocate the new value. No new array is needed.
+
+``` Go
+slice := []int{10, 20, 30, 40, 50} // length and capacity of 5 elements.
+newSlice := slice[1:3] // length of 2 and capacity of 4 elements.
+newSlice = append(newSlice, 60) // Assign the value of 60 to the new element.
+```
+
+Since the original slice is sharing the underlying array, slice also sees the changes in index 3.
+```Go
+// slice = [10, 20, 30, 60, 50]
+// newSlice = [10, 20, 60]
+``` 
+
+2. **append**: When there’s no available capacity in the underlying array for a slice, the append function will create a new underlying array.
+
+
+```Go
+slice := []int{10, 20, 30, 40} // Length and Capacity of 4 elements.
+newSlice := append(slice, 50) // No more capacity => need to createa new array
+```
+
+When there’s no available capacity in the underlying array for a slice, the append function will create a new underlying array, copy the existing values that are being referenced, and assign the new value.There wont be sharding anymore between slices. The capacity of the array is doubled from its original size 
+
+It is possible to append several elements at one call:
+
+```Go
+s1 := []int{1, 2}
+s2 := []int{3, 4}
+append(s1, s2...) -> // [1, 2, 3, 4]
+```
+#### Three index slices
+
+This third index gives you control over the capacity of the new slice. The purpose is not to increase capacity, but to restrict the capacity
+```Go
+// Create a slice of strings.
+// Contains a length and capacity of 5 elements.
+source := []string{"Apple", "Orange", "Plum", "Banana", "Grape"}
+
+// Slice the third element and restrict the capacity.
+// Contains a length of 1 element and capacity of 2 elements.
+slice := source[2:3:4]
+```
+With the third index we indicate up to what element the new slice has access
+
+By having the option to set the capacity of a ```new_slice``` to be the same as the length,
+you can force the first append operation to detach the ```new_slice``` from the underlying
+array. Detaching the new slice from its original source array makes it safe to change, avoiding overwriting the original array.
+
+
+#### Iterating over slices 
+
+Since a slice is a collection, you can iterate over the elements. 
+
+The keyword range, when iterating over a slice, will return two values. The first value
+is the index position and the second value is a copy of the value in that index position.
+
+It’s important to know that range is making a copy of the value, not returning a reference. 
+
+```Go
+// Contains a length and capacity of 4 elements.
+slice := []int{10, 20, 30, 40}
+// Iterate over each element and display the value and addresses.
+for index, value := range slice {
+  fmt.Printf("Value: %d Value-Addr: %X ElemAddr: %X\n",
+    value, &value, &slice[index])
+}
+Output:
+Value: 10 Value-Addr: 10500168 ElemAddr: 1052E100
+Value: 20 Value-Addr: 10500168 ElemAddr: 1052E104
+Value: 30 Value-Addr: 10500168 ElemAddr: 1052E108
+Value: 40 Value-Addr: 10500168 ElemAddr: 1052E10C
+//The address for the value variable is always the same because it’s a variable that contains a copy
+```
+#### Multidimensional Slices
+Slices are one-dimensional, but they can be composed to create multidimensional slices 
+``` Go
+// Create a slice of a slice of integers.
+slice := [][]int{{10}, {100, 200}}
+```
+The outer slice contains two elements, each of which are slices. The slice in the first
+element is initialized with the single integer 10 and the slice in the second element
+contains two integers, 100 and 200.
+
+#### Passing slices between functions
+
+Passing a slice between two functions requires nothing more than passing the slice by
+value.
+Only the slice is being copied, not the underlying array. (That is the array-address, the length and capacity).
+
+On a 64-bit architecture, a slice requires 24 bytes of memory. The pointer field
+requires 8 bytes, and the length and capacity fields require 8 bytes each one.
+
+### Map 
+The strength of a map is its ability to retrieve data quickly based on the key. A key works like an index, pointing to the value you associate with that key. Map is implemented using a hash table.
+

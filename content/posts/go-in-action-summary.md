@@ -12,8 +12,9 @@ description: Summary about Go in Action book, for later personal consulting on G
 weight: 10
 ---
 
+# Go in Action
 
-## Notes Chapter 2
+## Chapter 2. Summary
 
 * If your main function doesn’t exist in package main, the build tools won’t produce an executable.
 
@@ -63,10 +64,7 @@ doesn’t change this fact. As we access functionality from the json package, we
 just the name json.
 
 
-# Go in Action
-
-## Chapter 2. Summary
-
+## Chapter 3
 
 Packages are found on disk based on their relative path to the directories referenced
 by the Go environment.
@@ -184,8 +182,7 @@ array[1][1] = 40
 #### Passing Array between functions
 
 When you pass variables between functions, they’re always
-passed by value. When your variable is an array, this means the entire array, regardless
-of its size, is copied and passed to the function.
+passed by value. When your variable is an array, this means **the entire array, regardless of its size, is copied and passed to the function**
 
 #### Slices
 

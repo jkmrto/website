@@ -14,6 +14,8 @@ weight: 10
 
 # Go in Action
 
+At this post I will try to summarize some of the main concepts exposed in this well know book [Go in action](https://www.manning.com/books/go-in-action). It will be ended as soon as I get finished the book. 
+
 ## Chapter 2. Summary
 
 * If your main function doesn’t exist in package main, the build tools won’t produce an executable.
@@ -341,5 +343,42 @@ On a 64-bit architecture, a slice requires 24 bytes of memory. The pointer field
 requires 8 bytes, and the length and capacity fields require 8 bytes each one.
 
 ### Map 
+
 The strength of a map is its ability to retrieve data quickly based on the key. A key works like an index, pointing to the value you associate with that key. Map is implemented using a hash table.
 
+Passing a map between two functions doesn’t make a copy of the map.
+
+```Go
+
+colors := map[string]string{
+"AliceBlue": "#f0f8ff",
+"Coral": "#ff7F50",
+"DarkGray": "#a9a9a9",
+"ForestGreen": "#228b22",
+}
+
+// The output when indexing a Map will depend in the number of variables at return
+value, exists := colors["Coral"] 
+value := colors["Coral"]
+```
+
+## Chapter 5. Go's type system
+
+
+A value’s type provides the compiler with two pieces of information: first, how
+much memory to allocate—the size of the value—and second, what that memory
+represents.
+
+### User defined types
+Go allows you the ability to declare your own types. Struct types are declared by composing a fixed set of unique fields
+
+Any time a variable is created and initialized to its zero value, it’s idiomatic to use
+the keyword var. 
+
+```gO
+// admin represents an admin user with privileges.
+type admin struct {
+  person user
+  level string
+}
+```

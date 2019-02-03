@@ -11,10 +11,17 @@ title: Api Rest With Cowboy
 description: This tutorial will show you how to create a simple theme in Hugo.
 weight: 10
 ---
-At Elixir world the well know framework **Phoenix** is the main tool to develop the client side interface in any project. This framework allows us to develop complex real-time web systems simplily with a lot of integrated features such as websockets. But in the case of just pretending to build a simple api Rest a good option is to use the **Cowboy** library, which makes quite more lightweight the final application than using Phoenix.
 
-In this post I will expose how to build a simple Rest Api Service with **plug_cowboy**. This library makes even easier to user the **Cowboy** library, which is native from Erlang.
+# Api Rest with Cowboy
 
+At Elixir world the well know framework **Phoenix** is the main tool to develop the client side interface in any project. This framework allows us to develop complex real-time web systems simply with a lot of integrated features such as websockets. But in the case of just pretending to build a simple api rest a good option is to use the **Cowboy** library, which makes quite more lightweight the final application than using Phoenix.
+
+In this post I will expose how to build a simple Rest Api Service with **plug_cowboy**. This library makes even easier to use the **Cowboy** library, which is native from Erlang.
+
+The code of this post is availabe at this [github repository](https://github.com/jkmrto/api-rest-cowboy). 
+
+
+## Setup project
 
 Create New project with Elixir
 ```bash
@@ -36,10 +43,11 @@ Let's get and compile this dependency:
 mix deps.get && mix deps.compile
 ```
 
-Let's use the ```lib/cowboy_rest.ex``` file as application entrypoint for supervision tree. We need to indicate this on our ```mix.exs``` file:
+## Application entrypoint
 
-```elixir
-```
+Let's use the ```lib/cowboy_rest.ex``` file as application entrypoint for the supervision tree. We need to indicate this on our ```mix.exs``` file:
+
+
 
 And set ```lib/cowboy_rest.exs``` as an application module so his content will be:
 ``` Elixir
@@ -59,6 +67,8 @@ end
 
 
 We will create the folder ```lib/cowboy_rest``` where submodules will be included. In our case the only submodule will be the web one at ```lib/cowboy_rest/web```.
+
+## Cowboy files structure
 
 At this point we can start working on Cowboy on the Web submodule. We will need:
 
@@ -137,7 +147,7 @@ defmodule CowboyRest.Web.Handler do
 
 But in order to launch this submodule we need to launch our new Web supervisor from the application root, so the file ```ib/cowboy_rest.exs``` should look like this:
 
-```
+```Elixir
 defmodule CowboyRest do
   use Application
 
@@ -153,10 +163,12 @@ end
 
 ```
 
+## Running it
 
-Now if we run the application with ```iex -S mix``` and them request http:
+Now if we run the application with ```iex -S mix```, we can try a http request trough the command line with **curl**:
 ```bash
 > curl localhost:4000/cowboy_rest/welcome
 Welcome to Cowboy Rest Services
 ```
+
 We can see how it is really easy to have a lightweigth API Rest application on elixir using Cowboy.

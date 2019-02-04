@@ -12,9 +12,7 @@ description: This tutorial will show you how to create a simple theme in Hugo.
 weight: 10
 ---
 
-# Api Rest with Cowboy
-
-At Elixir world the well know framework **Phoenix** is the main tool to develop the client side interface in any project. This framework allows us to develop complex real-time web systems simply with a lot of integrated features such as websockets. But in the case of just pretending to build a simple api rest a good option is to use the **Cowboy** library, which makes quite more lightweight the final application than using Phoenix.
+At [Elixir](https://elixir-lang.org/) world the well know framework **Phoenix** is the main tool to develop the client side interface in any project. This framework allows us to develop complex real-time web systems simply with a lot of integrated features such as websockets. But in the case of just pretending to build a simple api rest a good option is to use the **Cowboy** library, which makes quite more lightweight the final application than using Phoenix.
 
 In this post I will expose how to build a simple Rest Api Service with **plug_cowboy**. This library makes even easier to use the **Cowboy** library, which is native from Erlang.
 
@@ -59,7 +57,7 @@ defmodule CowboyRest do
     # No childrent yet
     ]
 
-    opts = [strategy: :one_for_one, name: CowboyRest.Supervisor]
+    opts = [strategy: :one_for_one]
     Supervisor.start_link(children, opts)
   end
 end
@@ -156,8 +154,7 @@ defmodule CowboyRest do
     # No childrent yet
     ]
 
-    opts = [strategy: :one_for_one, name: CowboyRest.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children, [])
   end
 end
 

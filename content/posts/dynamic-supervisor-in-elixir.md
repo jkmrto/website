@@ -7,7 +7,7 @@ menu:
     parent: tutorials
 next: /tutorials/github-pages-blog
 prev: /tutorials/automated-deployments
-title: Dynamic Supervisor Example
+title: Dynamic Supervisor With Registry
 description: This post will expose how to build a bais dynamic supervisor in Elixir.
 weight: 10
 ---

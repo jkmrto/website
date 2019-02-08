@@ -24,11 +24,12 @@ Let's create a new project using ```mix``` through the command line with:
 ```Bash
 mix new dynamic_supervisor_with_registry
 ```
-```
 
 We need to modify our file ```mix.exs``` to indicate the new application entrypoint:
+
 ```Elixir
 ............
+#mix.exs
   def application do
     [
       mod: {DynamicSupervisorWithRegistry, []},
@@ -70,7 +71,7 @@ end
 As children of this module we have:
 
   * **Registry**: Allow to register the workers by a custom name, that will allow to acess the workers easily, without needing to know its *pid*
-  
+
   * **DynamicSupervisorWithRegistry.WorkerSupervisor**. Dynamic supervisor en charge on supervising future workers. 
 
 ## Workers Supervisor
@@ -97,7 +98,7 @@ defmodule DynamicSupervisorWithRegistry.WorkersSupervisor do
 end
 ```
 
-It is important to note that workers will be launched with ``` restart: :transient ``` will be only restated if they terminate due to an error not it was a ```:normal``` termination
+It is important to note that workers will be launched with ``` restart: :transient ``` which indicates that workers will berestarted only if they terminate due to an error not it was a ```:normal``` termination
 
 ## Worker
 

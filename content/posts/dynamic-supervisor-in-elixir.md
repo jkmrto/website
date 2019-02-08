@@ -22,25 +22,8 @@ Since Elixir 1.6, [Dynamic Supervisor](https://hexdocs.pm/elixir/DynamicSupervis
 
 Let's create a new project using ```mix``` through the command line with:
 ```Bash
-mix new dynamic_supervisor_example
+mix new dynamic_supervisor_with_registry
 ```
-
-We will use the module at ```lib/dynamic_supervisor_example``` as application entrypoint so his content at first would be:
-
-```Elixir
-# lib/dynamic_supervisor_example.ex
-defmodule DynamicSupervisorExample do
-  use Application
-
-  def start(_type, _args) do
-    children = [
-      # No childrent yet
-    ]
-
-    opts = [strategy: :one_for_one, name: __MODULE__]
-    Supervisor.start_link(children, opts)
-  end
-end
 ```
 
 We need to modify our file ```mix.exs``` to indicate the new application entrypoint:
@@ -48,7 +31,7 @@ We need to modify our file ```mix.exs``` to indicate the new application entrypo
 ............
   def application do
     [
-      mod: {DynamicSupervisorExample, []},
+      mod: {DynamicSupervisorWithRegistry, []},
       extra_applications: [:logger]
     ]
   end
@@ -85,7 +68,9 @@ end
 ```
 
 As children of this module we have:
+
   * **Registry**: Allow to register the workers by a custom name, that will allow to acess the workers easily, without needing to know its *pid*
+  
   * **DynamicSupervisorWithRegistry.WorkerSupervisor**. Dynamic supervisor en charge on supervising future workers. 
 
 ## Workers Supervisor

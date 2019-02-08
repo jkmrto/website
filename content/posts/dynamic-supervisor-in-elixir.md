@@ -55,13 +55,47 @@ We need to modify our file ```mix.exs``` to indicate the new application entrypo
 ............
 ```
 
-# Dynamic Supervisor under Supervision Tree
 
-Our dynamic supervisor module will be placed at ``` lib/dynamic_supervisor_example/worker_supervisor.ex``` with this content at first:
-```Elixir
-# lib/dynamic_supervisor_example/workers_supervisor.ex
-defmodule DynamicSupervisorExample.WorkersSupervisor do
+# Components
+
+The objective si to have 
+
+## Application entrypoint
+
+We need to use an application entrypoint where starts the supervision tree, the file. This module will be on charge of supervise the `Registry` and the `DynamicSupervisorWithRegistry.WorkerSupervisor`.
+
+``` Elixir
+#lib/dynamic_supervisor_example.ex
+defmodule DynamicSupervisorWithRegistry do
+  use Application # Indicate this module is an application entrypoint
+
+  @registry :worker_registry
+
+  def start(_args, _opts) do
+    children = [
+      { DynamicSupervisorWithRegistry.WorkerSupervisor, [] },
+      { Registry, [keys: :unique, name: @registry]}
+    ]
+
+    # :one_to_one strategy indicates only the crashed child will be restarted, without affecting the rest of children.
+    opts = [strategy: :one_for_one, name: __MODULE__] 
+    Supervisor.start_link(children, opts)
+  end
+end
+```
+
+As children of this module we have:
+  * **Registry**: Allow to register the workers by a custom name, that will allow to acess the workers easily, without needing to know its *pid*
+  * **DynamicSupervisorWithRegistry.WorkerSupervisor**. Dynamic supervisor en charge on supervising future workers. 
+
+## Workers Supervisor
+This module should just supervise the workers and allow to launch new workers.
+
+``` Elixir
+# lib/dynamic_supervisor_example/worker_supervisor.ex
+defmodule DynamicSupervisorWithRegistry.WorkersSupervisor do
   use DynamicSupervisor
+  alias DynamicSupervisorWithRegistry.Worker
 
   def start_link(_arg),
     do: DynamicSupervisor.start_link(__MODULE__, [], name: __MODULE__)
@@ -69,22 +103,74 @@ defmodule DynamicSupervisorExample.WorkersSupervisor do
   def init(_arg),
     do: DynamicSupervisor.init(strategy: :one_for_one)
 
+  def start_child(child_name) do
+    DynamicSupervisor.start_child(
+      __MODULE__,
+      %{id: Worker, start: { Worker, :start_link,  [child_name]}, restart: :transient})
+  end
+
 end
 ```
 
-We will add this new module as a children to the application entrypoint:
+It is important to note that workers will be launched with ``` restart: :transient ``` will be only restated if they terminate due to an error not it was a ```:normal``` termination
 
-``` Elixir
-# lib/dynamic_supervisor_example.ex
-......
-    children = [
-      { DynamicSupervisorExample.WorkersSupervisor, [] }
-    ]
-......
+## Worker
+
+```
+# lib/dynamic_supervisor_example/worker.ex
+defmodule DynamicSupervisorWithRegistry.Worker do
+  use GenServer
+  require Logger
+
+  @registry :worker_registry
+
+  ## API
+  def start_link(name),
+    do: GenServer.start_link(__MODULE__, name, name: via_tuple(name))
+
+  def stop(name), do: GenServer.stop(via_tuple(name))
+
+  def crash(name), do: GenServer.cast(via_tuple(name), :raise)
+
+  ## Callbacks
+  def init(name) do
+    Logger.info("Starting #{inspect(name)}")
+    {:ok, name}
+  end
+
+  def handle_cast(:work, name) do
+    Logger.info("hola")
+    {:noreply, name}
+  end
+
+  def handle_cast(:raise, name),
+    do: raise RuntimeError, message: "Error, Server #{name} has crashed"
+
+  def terminate(reason, name) do
+    Logger.info("Exiting worker: #{name} with reason: #{inspect reason}")
+  end
+
+  ## Private
+  defp via_tuple(name) ,
+    do: {:via, Registry, {@registry, name} }
+
+end
 ```
 
 
+# Running it
+```
+DynamicSupervisorWithRegistry.WorkerSupervisor.start_child("worker_1")
+DynamicSupervisorWithRegistry.Worker.
+GenServer.cast(pid, :work)
+Registry.lookup(:worker_registry, 345)
 
+DynamicSupervisorWithRegistry.Worker.crash("worker_1")
+
+Registry.count(:worker_registry)
+
+ DynamicSupervisorWithRegistry.Worker.stop("worker_1")
+```
 
 
 

@@ -58,7 +58,7 @@ hasCJKLanguage = false
 	readMore = ""
 
 	# Share
-	enableShare = true
+	enableShare = false
 	tweet = ""
 	share = ""
 
@@ -75,5 +75,5 @@ hasCJKLanguage = false
 # Add additional social link entries underneath
 [social]
 	linkedin-square = "https://www.linkedin.com/in/juan-carlos-martinez-de-la-torre-296bb3110"
-	twitter-square = "https://www.twitter.com/nodejh"
-	github-square = "https://github.com/juanka1331"
+	twitter-square = "https://www.twitter.com/jkmrto"
+	github-square = "https://github.com/jkmrto"

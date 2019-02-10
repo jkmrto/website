@@ -8,8 +8,8 @@ googleAnalytics = "your_google_analytics_id"
 hasCJKLanguage = false
 
 [params]
-	author = "site_author"
-	description = "Site Description"
+	author = "jkmrto"
+	description = "Personal Web Site"
 	bio = "I am telecommunications enginner who loves to code. "
 
 	twitter = "your_twitter_id"

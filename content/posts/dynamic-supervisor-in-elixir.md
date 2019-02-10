@@ -68,9 +68,13 @@ end
 
 As children of this module we have:
 
-  * **Registry**: Allow to register the workers by a custom name, that will allow to acess the workers easily, without needing to know its *pid*. To refer this registry later we will need to use the registry name that is indicated by ```name: @registry```
+  * **Registry** with name :workers_registry
 
-  * **DynamicSupervisorWithRegistry.WorkerSupervisor**. Dynamic supervisor in charge of supervising future workers. 
+  * **DynamicSupervisorWithRegistry.WorkerSupervisor**.
+
+## Registry
+
+Allow to register the workers by a custom name (in our case *:workers_registry*), that will allow to acess the workers easily, without needing to know its *pid*, just by a custom name. It is launched at the same supervisor level that the **WorkersSupervisor** add will be referenced by workers at starting them.
 
 ## Workers Supervisor
 This module should just supervise the workers and allow to launch new workers.

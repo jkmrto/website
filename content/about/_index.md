@@ -4,9 +4,9 @@ title = "About"
 hidden = true
 +++
   
-I am a software engineer who enjoys coding. I am specially interested in parallel computing, distributed systems and functional programming. 
+I am a software engineer who enjoys coding. I am specially interested in functional programming, concurrent and distributed systems.
 
-The main aim on this website is keeping record of some of the issues that I have faced at work, so this could help to solve out similar problems on the future. By the way, much better if someone finds this website helpful
+The main aim on this website is keeping record of some of the issues that I have faced at work, so this could help to solve out similar problems on the future. By the way, much better if someone finds this website helpful.
 ***
 
 ## Main Skills
@@ -14,7 +14,7 @@ The main aim on this website is keeping record of some of the issues that I have
 
 </pre>
 
-* **Programming languagues**:  *Elixir, Python, Javascript, Bash, Go, Javascript ES6, Elm, C*. Although my prefer languague is Elixir (developing OTP functionalities), I have worked in other languagues like Python or Javascript. 
+* **Programming languagues**:  *Elixir, Python, Javascript, Bash, Go, ES6, Elm, C*. Although my prefer languague is Elixir (developing OTP functionalities), I have worked extensevely in other languagues like Python or Javascript. 
 
 * **Devops**: *Linux, Docker, Nginx, Kubernetes.* Every application I have worked on is designed to be dockerized and to be launched in a cloud provider like Azure or OVH over Kubernetes.
 
@@ -44,11 +44,11 @@ Some of the main project I have worked on:
 
 * **Analysis Project**. This applicaction launches some Python analysis from Elixir when a trigger event happens. It requires to collect data from a RabbitMQ broadcast and save the data on ETS until the events happen. Using MongoDB to store the results. It includes the development of a simple client with Phoenix to expose the results.  
 
-* **Like/Dislike System**. Developing the cliente side on JS and the backend side with phoenix and Elixir. Real time updates using channels of Phoenix. This functionality includes realtime statistics to evaluate the opinion per each day. 
+* **Like/Dislike System**. Developing the client side on **Javascript ES6** and the backend side with **Phoenix** and **Elixir**. Real time updates using channels of Phoenix. This functionality includes realtime statistics to evaluate the opinion per each day. 
 
 * **Analitics Service**. Connecting to an external Api Rest to request some data analysis.
 
-* **Database Data Exporter**. Tool written in Python in charge of daily exporting and cleaning data from some internal database to an outside database, for later analysis. It allows to export data from Postgresql and MongoDB. There is up to 10 GB of data moved each day.
+* **Database Data Exporter**. Tool written in **Python** in charge of daily exporting and cleaning data from some internal database to an outside database, for later analysis. It allows to export data from Postgresql and MongoDB. There is up to 10 GB of data moved each day.
 
 <pre></pre>
 

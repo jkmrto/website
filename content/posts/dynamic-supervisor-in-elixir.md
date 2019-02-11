@@ -74,7 +74,7 @@ As children of this module we have:
 
 ## Registry
 
-Allow to register the workers by a custom name (in our case *:workers_registry*), that will allow to acess the workers easily, without needing to know its *pid*, just by a custom name. It is launched at the same supervisor level that the **WorkersSupervisor** add will be referenced by workers at starting them.
+The registry allows us to register the workers by a custom name (in our case *:workers_registry*), that will allow to acess the workers easily, without needing to know its *pid*, just by a custom name. It is launched at the same supervisor level that the **WorkersSupervisor** add will be referenced by workers at starting them.
 
 ## Workers Supervisor
 This module should just supervise the workers and allow to launch new workers.

@@ -32,7 +32,7 @@ And our second node:
 docker run -i -t --net=host elixir iex --sname node2 --cookie cookie
 ```
 
- At using '--net=host' option we are making using of the same network interface between the two dockers, so at some point this scenario is quite similar to the one we have if we launch the two elixir instances locally.
+ At using [--net=host](https://docs.docker.com/network/host/) option we are making using of the same network interface between the two dockers, so at some point this scenario is quite similar to the one we have if we launch the two elixir instances locally.
 
 Let's check if our two nodes are connected:
 
@@ -132,7 +132,11 @@ defmodule LibclusterPoc do
 end
 ```
 
-We can launch the three instances in local and to check how the nodes are automatically beeing connected.
+It is important to note this:
+- The strategic used by libcluster is `Cluster.Strategy.Epmd` which relies on epmd to get connected the different hosts. 
+- They have been specified three nodes to get connected.
+
+Let's launch the three instances in local and to check how the nodes are automatically connected.
 
 
 ```Elixir
@@ -153,21 +157,22 @@ jkmrto:libcluster_poc/ $ iex --sname node3 --cookie cookie -S mix
 [libcluster:example] connected to :"node2@jkmrto-XPS-15-9570"
 ```
 
-It is important to note this:
-- The strategic used by libcluster is `Cluster.Strategy.Epmd` which relies on epmd to get connected the different hosts. 
-- They have been specified three nodes to get connected.
-
-
 ### Checking the epmd
 
 ## On going
 
 2. Autoconnect using libcluster.
+
  - Add docker compose with custom network and libcluster.  
 
  3.Docker DNS
+
  - Example  with the first kind of connection without using docker dns
+
  - Example using docker DNS
-  - What is docker dns
-  - Using custom network 
+ 
+ - What is docker dns
+ 
+ - Using custom network 
+ 
  - Docker compose ?? (autoscale with docker compose up).

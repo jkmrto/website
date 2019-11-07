@@ -133,7 +133,9 @@ end
 ```
 
 It is important to note this:
+
 - The strategic used by libcluster is `Cluster.Strategy.Epmd` which relies on epmd to get connected the different hosts. 
+
 - They have been specified three nodes to get connected.
 
 Let's launch the three instances in local and to check how the nodes are automatically connected.

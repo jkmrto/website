@@ -16,7 +16,7 @@ weight: 10
 
 Last days I have been diving a little into the wonderful world of Erlang distributed. Elixir, thanks to that it is based on Erlang, has some built-in language constructs for distributed systems which make it easier to distribute systems in comparison with other programming paradigms.
 
-Since Erlang is based on the actor model (where each actor is a process) it is transparent to erlang if the actor is local or if it is in a remote host. At the end all we have to guarante is that the destiny process is connected on the same cluster that our node.
+Since Erlang is based on the actor model (where each actor is a process) it is transparent to erlang if the actor is local or if it is in a remote host, as long as the nodes are connected.
 
 Another tool I love to user is Docker, so I started to dive into how to connect two Elixir instances dockerized, it has some tricks that we will discover along this posts.
 
@@ -37,12 +37,14 @@ docker run -i -t --net=host elixir iex --sname node2 --cookie cookie
 Let's check if our two nodes are connected:
 
 ```Elixir
+#Node2
 iex(node2@jkmrto-XPS-15-9570)2> Node.list()
 []
 ```
 This means that the nodes are not connected yet. it is needed to require to get the connection:
 
 ```Elixir
+Node2
 iex(node2@jkmrto-XPS-15-9570)2> Node.connect()
 true
 ```
@@ -68,16 +70,19 @@ iex(node2@jkmrto-XPS-15-9570)1> Node.list()
 # Connecting nodes with Libcluster
 
 One useful library when trying to get connected our nodes is [libcluster](https://github.com/bitwalker/libcluster). As his own documentation exposes:
+
 > `This library provides a mechanism for automatically forming clusters of Erlang nodes`.
 
 Let's build a simple application making use of this library. 
 - Create the project:
 
+
 ```Bash
-iex -S mix
+mix new libcluster_poc
 ```
 
-- Add the dependency;
+Let's add the dependency on the mix file, remember to check the latest version at [hex](https://hex.pm/packages/libcluster)
+
 ```Elixir
 #./mix.exs
 ...
@@ -89,7 +94,7 @@ end
 ...
 ```
 
-Add the entrypoint for the application: 
+Let's add the application entrypoint:
 
 ```Elixir
 #./mix.exs
@@ -106,6 +111,7 @@ end
 Let's add the module that is called at entrypoing:
 
 ```Elixir
+# ./lib/libcluster_poc.ex
 defmodule LibclusterPoc do
   use Application
 
@@ -134,32 +140,60 @@ end
 
 It is important to note this:
 
-- The strategic used by libcluster is `Cluster.Strategy.Epmd` which relies on epmd to get connected the different hosts. 
+- The strategic used by libcluster is `Cluster.Strategy.Epmd` which relies on epmd to get connected the different hosts.
 
 - They have been specified three nodes to get connected.
+
 
 Let's launch the three instances in local and to check how the nodes are automatically connected.
 
 
 ```Elixir
+# First node
 jkmrto:libcluster_poc/ $ iex --sname node1 --cookie cookie -S mix
 [libcluster:example] unable to connect to :"node2@jkmrto-XPS-15-9570"
 [libcluster:example] unable to connect to :"node3@jkmrto-XPS-15-9570"
 ```
 
 ```Elixir
+# Second node
 jkmrto:libcluster_poc/ $ iex --sname node2 --cookie cookie -S mix                         
 [libcluster:example] connected to :"node1
 [libcluster:example] unable to connect to :"node3@jkmrto-XPS-15-9570"
 ```
 
 ```Elixir
+# Third node
 jkmrto:libcluster_poc/ $ iex --sname node3 --cookie cookie -S mix                         
 [libcluster:example] connected to :"node1@jkmrto-XPS-15-9570"
 [libcluster:example] connected to :"node2@jkmrto-XPS-15-9570"
+> Node.list()
+[:"node1@jkmrto-XPS-15-9570", :"node2@jkmrto-XPS-15-9570"]
 ```
 
-### Checking the epmd
+Amazing! We can see how after running the third node the logs of this node indicates us that they have been correctly connected. So in the end, all we have to care about to get connected the nodes is to indicates the list of nodes when starting the application.
+
+
+## Checking the epmd
+
+One interesting system of the Erlang ecosystem is the Erlang Port Mapper Daemon, also know as [epmd](http://erlang.org/doc/man/epmd.html). This service is in charge to map each erlang node to the port where it is listening for connections.
+
+A epmd server is started as soon as one erlang node starts. If another erlang node is launched in the same node then the relation `{port, node_name}` will be added to the already running epmd.
+
+
+We can check the erlang nodes running in our machine using the epmd service. The epmd executable is located in the same folder that `erl` binary.
+```
+> which erl
+/home/jkmrto/.asdf/shims/erl
+> cd /home/jkmrto/.asdf/shims
+> epmd -names
+epmd: up and running on port 4369 with data:
+name node3 at port 39099
+name node2 at port 44643
+name node1 at port 45015
+```
+
+
 
 ## On going
 

@@ -14,7 +14,7 @@ weight: 10
 
 # Intro 
 
-Last days I have been diving a little into the wonderful world of Erlang distributed. Elixir, thanks to that it is based on Erlang, has some built-in language constructs for distributed systems which make it easier to distribute systems in comparison with other programming paradigms.
+Last days I have been diving a little into the wonderful world of Erlang distributed. Elixir, has some built-in constructs for distributed systems which make it easier to distribute systems in comparison with other programming paradigms.
 
 Since Erlang is based on the actor model (where each actor is a process) it is transparent to erlang if the actor is local or if it is in a remote host, as long as the nodes are connected.
 
@@ -73,7 +73,10 @@ One useful library when trying to get connected our nodes is [libcluster](https:
 
 > `This library provides a mechanism for automatically forming clusters of Erlang nodes`.
 
-Let's build a simple application making use of this library. 
+## Libcluster POC
+
+Let's build a simple proof of concept with libcluster to run some test over it.
+
 - Create the project:
 
 
@@ -144,6 +147,7 @@ It is important to note this:
 
 - They have been specified three nodes to get connected.
 
+## Executing three instances locally
 
 Let's launch the three instances in local and to check how the nodes are automatically connected.
 
@@ -194,8 +198,70 @@ name node1 at port 45015
 ```
 
 
+## Executing three instances dockerized
 
-## On going
+### Dockerizing the poc
+
+Let's use this simple dockerfile:
+
+``` Docker
+# ./dockerfile
+FROM elixir:1.9.4-slim
+
+RUN mix local.hex --force
+RUN mix local.rebar --force
+
+RUN mkdir -p /opt/libcluster_poc
+ADD ./config /opt/libcluster_poc/config
+ADD ./lib /opt/libcluster_poc/lib
+ADD ./mix.exs /opt/libcluster_poc
+
+
+WORKDIR /opt/libcluster_poc  
+RUN mix deps.get && mix compile
+
+ENTRYPOINT [ "iex", "-S",  "mix" ]
+```
+
+Let's build and try it:
+
+```
+> docker build -t libcluster_poc .
+```
+
+And running it:
+
+``` Elixir
+> docker run -it  libcluster_poc
+
+Erlang/OTP 22 [erts-10.5.4] [source] [64-bit] [smp:12:12] [ds:12:12:10] [async-threads:1] [hipe]
+
+17:44:20.079 [warn]  [libcluster:example] unable to connect to :"node1@jkmrto-XPS-15-9570": not part of network
+ 
+17:44:20.080 [warn]  [libcluster:example] unable to connect to :"node2@jkmrto-XPS-15-9570": not part of network
+
+17:44:20.080 [warn]  [libcluster:example] unable to connect to :"node3@jkmrto-XPS-15-9570": not part of network
+Interactive Elixir (1.9.4) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> 
+```
+
+### Using docker network
+
+Once we have our docker defined, we need to start think about how to have some of them connected. Let's now use an internal docker net, avoiding using the `--net=host` trick.
+
+Let's create the network, calling it `net_poc`:
+
+```Elixir
+docker network create net_poc 
+```
+
+Let's run two docker instancies, remember to put them on the
+
+```
+docker run -it --net net_poc --net-alias web --entrypoint=iex libcluster_poc --cookie cookie --sname node2 -S mix
+```
+
+# On going
 
 2. Autoconnect using libcluster.
 

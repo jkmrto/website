@@ -255,15 +255,101 @@ Let's create the network, calling it `net_poc`:
 docker network create net_poc 
 ```
 
-Let's run two docker instancies, remember to put them on the
+### Custom docker run
+
+Let's run our docker instances. We are going to need some options in order to get the expected behaviour.
+
+These options are:
+
+- `-it`: It is required to initialize an interactive session.
+
+- `--net net_poc`: It is required to attach the docker to network previously created.
+
+-  `--name`: This would be the name of the node used by the [docker DNS](https://docs.docker.com/v17.09/engine/userguide/networking/configure-dns/) to resolve the docker location inside our custom network. It is also the name given to the docker that allows to identify the container when executing `docker ps`.
+
+- `--hostname`: This will be the hostname of the docker launched. It is used by erlang to fully qualified the erlang node. 
+
+-  `--entrypoint=iex libcluster_poc --cookie cookie --sname node1 -S mix`: This syntax allows to define the docker image to be executed and a custom entrypoint, since it is needed to be different for each container in order to customize the name of the erlang node with the -sname flag.
+    - `--entrypoint=iex`: Executable to be run when starting the docker.
+    - `libcluster_poc`: Docker image to be executed. 
+    - `--cookie cookie --sname node1 -S mix`: Entrypoint arguments.
+
+```Elixir
+# Node1
+> docker run -it --net net_poc --hostname node1 --name node1 --entrypoint=iex libcluster_poc --cookie cookie --sname node1 -S mix
+```
+
+``` Elixir
+# Node2
+> docker run -it --net net_poc --hostname node2 --name node2 --entrypoint=iex libcluster_poc --cookie cookie --sname node2 -S mix
+```
+
+
+Once both of them are launched we can check that there is connectivity between both of them:
+
+``` Elixir
+# Node1
+> Node.ping(:node2@node2)
+pong
+```
+
+``` Elixir
+# Node2
+> Node.ping(:node1@node1)
+pong
+```
+
+Great! We have are two docker fully connected. 
+
+It is important to note that the nodes are not connected when starting them and they get connected when doing `Node.ping/1`. The next step is getting them connected at startup.
+
+### Automatically connection with libcluster.
+
+We just need to redefine the nodes at libcluster topologies to get nodes automatically connected at start.
+
+```Elixir
+#./lib/libcluster_poc.ex
+...
+topologies = [
+      example: [
+        strategy: Cluster.Strategy.Epmd,
+        config: [
+          hosts: [
+            :node1@node1,
+            :node2@node2
+          ]
+        ]
+      ]
+    ]
+```
+
+Let's rebuild the docker
+
 
 ```
-docker run -it --net net_poc --net-alias web --entrypoint=iex libcluster_poc --cookie cookie --sname node2 -S mix
+> docker build -t libcluster_poc .
 ```
+
+Let's run our dockers:
+
+```Elixir
+# Node1
+> docker run -it --net net_poc --hostname node1 --name node1 --entrypoint=iex libcluster_poc --cookie cookie --sname node1 -S mix
+[libcluster:example] unable to connect to :node2@node2
+```
+
+``` Elixir
+# Node2
+> $ docker run -it --net net_poc --hostname node2 --name node2 --entrypoint=iex libcluster_poc --cookie cookie --sname node2 -S mix
+[libcluster:example] connected to :node1@node1
+```
+
+Wonderful! Now our two nodes are connected at start up thanks to libcluster. 
 
 # On going
 
 2. Autoconnect using libcluster.
+ - Use docker dns to connect the containers
 
  - Add docker compose with custom network and libcluster.  
 

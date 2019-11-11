@@ -20,16 +20,16 @@ Since Erlang is based on the actor model (where each actor is a process) it is t
 
 Another tool I love to user is Docker, so I started to dive into how to connect two Elixir instances dockerized, it has some tricks that we will discover along this posts.
 
-# Connecting using --net flag
+# Connecting dockers with --net=host 
 
 In this first attempt we are going to launch two dockers using the latest elixir image, we will have opened two `iex` terminals where we can play with the nodes.
 
 ```console
-docker run -i -t --net=host elixir iex --sname node1 --cookie cookie
+> docker run -i -t --net=host elixir iex --sname node1 --cookie cookie
 ```
 And our second node:
 ``` console
-docker run -i -t --net=host elixir iex --sname node2 --cookie cookie
+> docker run -i -t --net=host elixir iex --sname node2 --cookie cookie
 ```
 
  At using [--net=host](https://docs.docker.com/network/host/) option we are making using of the same network interface between the two dockers, so at some point this scenario is quite similar to the one we have if we launch the two elixir instances locally.
@@ -37,15 +37,15 @@ docker run -i -t --net=host elixir iex --sname node2 --cookie cookie
 Let's check if our two nodes are connected:
 
 ```Elixir
-#Node2
-iex(node2@jkmrto-XPS-15-9570)2> Node.list()
+# Node2
+> Node.list()
 []
 ```
 This means that the nodes are not connected yet. it is needed to require to get the connection:
 
 ```Elixir
 Node2
-iex(node2@jkmrto-XPS-15-9570)2> Node.connect()
+> Node.connect()
 true
 ```
 
@@ -59,11 +59,11 @@ iex(node2@jkmrto-XPS-15-9570)4> Node.list()
 Another way to check the connectivity with other node is using [:net_admin:ping()](http://erlang.org/doc/man/net_adm.html#ping-1):
 
 ```elixir
-# From node1
-iex(node2@jkmrto-XPS-15-9570)1> :net_adm.ping(:node1@jkmrto-XPS-15-9570)
+# Node1
+> :net_adm.ping(:node1@jkmrto-XPS-15-9570)
 Pong
 
-iex(node2@jkmrto-XPS-15-9570)1> Node.list() 
+> Node.list()
 [:"node1@jkmrto-XPS-15-9570"]
 ```
 
@@ -299,7 +299,7 @@ pong
 pong
 ```
 
-Great! We have are two docker fully connected. 
+Great! We have are two docker fully connected.
 
 It is important to note that the nodes are not connected when starting them and they get connected when doing `Node.ping/1`. The next step is getting them connected at startup.
 
@@ -346,8 +346,24 @@ Let's run our dockers:
 
 Wonderful! Now our two nodes are connected at start up thanks to libcluster. 
 
-# On going
 
+
+## Connecting Dockers using DNS autodiscovery.
+
+Until now we have been forced to explicitly indicate which are the nodes that are going to be connected in the configuration of libcluster.
+
+Let's think about a possible scenario where we don't know the number of docker that are going to be available in our imaginary cluster. In that case, we will have to think about a way to autodiscover the nodes of our cluster.
+
+When working with docker and custom networks one useful command is this scenario is the -- net-alias that assigns a custom alias and can be assigned for as many dockers as we want.
+
+This shared alias can be used to autodiscover all the available dockers that have been labeled with the alias.
+
+### Checking DNS autodiscovery.
+
+
+### Autodiscover at startup
+
+#
 2. Autoconnect using libcluster.
  - Use docker dns to connect the containers
 

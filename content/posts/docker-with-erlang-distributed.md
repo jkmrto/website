@@ -354,12 +354,42 @@ Until now we have been forced to explicitly indicate which are the nodes that ar
 
 Let's think about a possible scenario where we don't know the number of docker that are going to be available in our imaginary cluster. In that case, we will have to think about a way to autodiscover the nodes of our cluster.
 
-When working with docker and custom networks one useful command is this scenario is the -- net-alias that assigns a custom alias and can be assigned for as many dockers as we want.
+When working with docker and custom networks one useful command is this scenario is the `--net-alias` that sets a custom alias and can be assigned for as many dockers as we want.
 
 This shared alias can be used to autodiscover all the available dockers that have been labeled with the alias.
 
 ### Checking DNS autodiscovery.
 
+Let's launch three nodes with the same `--net-alias`, that would be `web`. We should be able to require the three nodes directions asking to the docker DNS for this alias. 
+
+```Bash
+# Node 1
+$ docker run -it --net net_poc --net-alias web elixir bash
+root@a88f2309b047:$ ip addr show eth0
+66: eth0@if67: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:ac:1a:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.26.0.3/16 brd 172.26.255.255 scope global eth0
+```
+THe ip for our first node is `172.26.0.3`.
+
+```Bash
+# Node 2
+$ docker run -it --net net_poc --net-alias web elixir bash
+root@24bc556b10b3:$ ip addr show eth0
+64: eth0@if65: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:1a:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.26.0.2/16 brd 172.26.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+```
+
+The ip for the second node is `172.26.0.2`. Now we sould we able to retrieve the directions for this two hosts launching a new docekr connected to the same network but not having the same alias
+
+```Elixir
+# Node 3
+jkmrto:~/ $ docker run -it --net net_poc elixir
+> :inet.gethostbyname(:web)
+{:ok, {:hostent, 'web', [], :inet, 4, [{172, 26, 0, 3}, {172, 26, 0, 2}]}}
+```
 
 ### Autodiscover at startup
 

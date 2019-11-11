@@ -348,7 +348,7 @@ Wonderful! Now our two nodes are connected at start up thanks to libcluster.
 
 
 
-## Connecting Dockers using DNS autodiscovery.
+# Connecting Dockers using DNS autodiscovery.
 
 Until now we have been forced to explicitly indicate which are the nodes that are going to be connected in the configuration of libcluster.
 
@@ -358,7 +358,7 @@ When working with docker and custom networks one useful command is this scenario
 
 This shared alias can be used to autodiscover all the available dockers that have been labeled with the alias.
 
-### Checking DNS autodiscovery.
+## Checking DNS autodiscovery.
 
 Let's launch three nodes with the same `--net-alias`, that would be `web`. We should be able to require the three nodes directions asking to the docker DNS for this alias. 
 
@@ -386,7 +386,7 @@ The ip for the second node is `172.26.0.2`. Now we sould we able to retrieve the
 
 ```Elixir
 # Node 3
-jkmrto:~/ $ docker run -it --net net_poc elixir
+jkmrto:~ $ docker run -it --net net_poc elixir
 > :inet.gethostbyname(:web)
 {:ok, {:hostent, 'web', [], :inet, 4, [{172, 26, 0, 3}, {172, 26, 0, 2}]}}
 ```

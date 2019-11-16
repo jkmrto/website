@@ -396,7 +396,7 @@ jkmrto:~ $ docker run -it --net net_poc elixir
 ```
 
 
-### Autodiscover at startup
+## Autodiscovery at startup
 
 
 Let's launch the first node:

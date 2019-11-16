@@ -1,7 +1,7 @@
 ---
 author: "Juan Carlos Martinez de la Torre"
 date: 2019-09-11
-linktitle: docker-with-erlang-distributed
+linktitle: erlang-distributed-with-docker-and-libcluster
 menu:
   main:
     parent: tutorials
@@ -360,7 +360,7 @@ This shared alias can be used to autodiscover all the available dockers that hav
 
 ## Checking DNS autodiscovery.
 
-Let's launch three nodes with the same `--net-alias`, that would be `web`. We should be able to require the three nodes directions asking to the docker DNS for this alias. 
+Let's launch two nodes with the same `--net-alias`, that would be `web`. We should be able to get the addresses for these nodes asking to the docker DNS.
 
 ```Bash
 # Node 1
@@ -382,7 +382,7 @@ root@24bc556b10b3:$ ip addr show eth0
        valid_lft forever preferred_lft forever
 ```
 
-The ip for the second node is `172.26.0.2`. Now we sould we able to retrieve the directions for this two hosts launching a new docekr connected to the same network but not having the same alias
+The ip for the second node is `172.26.0.2`. Now we should be able to retrieve the directions for this two hosts launching a new docker connected to the same network:
 
 ```Elixir
 # Node 3
@@ -391,22 +391,39 @@ jkmrto:~ $ docker run -it --net net_poc elixir
 {:ok, {:hostent, 'web', [], :inet, 4, [{172, 26, 0, 3}, {172, 26, 0, 2}]}}
 ```
 
+```
+{:ok, {:hostent, 'web', [], :inet, 4, [ip1, ip2] }} = :inet.gethostbyname(:web)
+```
+
+
 ### Autodiscover at startup
 
-#
-2. Autoconnect using libcluster.
- - Use docker dns to connect the containers
 
- - Add docker compose with custom network and libcluster.  
-
- 3.Docker DNS
-
- - Example  with the first kind of connection without using docker dns
-
- - Example using docker DNS
+Let's launch the first node:
+``` Elixir
+$ NODE=node1; docker run -it --net net_poc --hostname $NODE --net-alias web --name $NODE --entrypoint=iex libcluster_poc --cookie cookie --sname node@$NODE -S mix                                  
+iex(node@node1)1> Node.list)()
+[]
+```
  
- - What is docker dns
- 
- - Using custom network 
- 
- - Docker compose ?? (autoscale with docker compose up).
+Let's laucnh the second one:
+```Elixir
+$ NODE=node2; docker run -it --net net_poc --hostname $NODE --net-alias web --name $NODE --entrypoint=iex libcluster_poc --cookie cookie --sname node@$NODE -S mix
+Interactive Elixir (1.9.4) - press Ctrl+C to exit (type h() ENTER for help) 
+
+22:22:51.408 [info]  [libcluster:example] connected to :node@node2
+iex(node@node1)1> Node.list)()
+[:node@node1]
+```
+
+And the third one:
+
+``` elixir
+$ NODE=node3; docker run -it --net net_poc --hostname $NODE --net-alias web --name $NODE --entrypoint=iex libcluster_poc --cookie cookie --sname node@$NODE -S mix
+Interactive Elixir (1.9.4) - press Ctrl+C to exit (type h() ENTER for help) 
+
+22:22:51.408 [info]  [libcluster:example] connected to :node@node1
+22:22:51.408 [info]  [libcluster:example] connected to :node@node2
+iex(node@node3)1> Node.list)()
+[:node@node1, :node@node2]
+```

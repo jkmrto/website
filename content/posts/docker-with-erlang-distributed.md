@@ -370,7 +370,8 @@ root@a88f2309b047:$ ip addr show eth0
     link/ether 02:42:ac:1a:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
     inet 172.26.0.3/16 brd 172.26.255.255 scope global eth0
 ```
-THe ip for our first node is `172.26.0.3`.
+
+THe ip for our first node is `172.26.0.3`. Let's launch the second one:
 
 ```Bash
 # Node 2
@@ -382,8 +383,10 @@ root@24bc556b10b3:$ ip addr show eth0
        valid_lft forever preferred_lft forever
 ```
 
-The ip for the second node is `172.26.0.2`. Now we should be able to retrieve the directions for this two hosts launching a new docker connected to the same network:
+The ip for the second node is `172.26.0.2`.
 
+Now we should be able to retrieve the directions for this two hosts launching a new docker connected to the same network and asking to the DNS for the `web` alias.
+s
 ```Elixir
 # Node 3
 jkmrto:~ $ docker run -it --net net_poc elixir
@@ -395,8 +398,78 @@ jkmrto:~ $ docker run -it --net net_poc elixir
 {:ok, {:hostent, 'web', [], :inet, 4, [ip1, ip2] }} = :inet.gethostbyname(:web)
 ```
 
+As we expected for the 'web' hostname the DNS provides us with two different IPs 172.26.0.3 and 172.26.0.2, related to the two nodes we have previously launched. 
 
-## Autodiscovery at startup
+## Autodiscovery nodes at startup
+
+Some steps are needed to be able to autodiscover the nodes based on the alias. Firstly we need to adapt the code of the application in order to:
+
+1. Retrieve IPs of the nodes based on the `--net-alias`.
+2. For all the given IPs: Get hostname based on IP.
+3. Used retrieved hosts as parameter on the start of libcluster to get them connected.
+
+![Start step for nodes autodiscovery](nodes_autodiscovery.png)
+
+With this in mind the `Application.start()` of the application should look like:
+
+``` Elixir
+defmodule LibclusterPoc do
+  use Application
+
+  def start(_type, _args) do
+    topologies = [
+      example: [
+        strategy: Cluster.Strategy.Epmd,
+        config: [
+          hosts: get_cluster_hosts()
+        ]
+      ]
+    ]
+
+    children = [
+      {Cluster.Supervisor, [topologies, [name: :cluster_supervisor]]}
+    ]
+
+    Supervisor.start_link(children, strategy: :one_for_one, name: LibclusterPoc)
+  end
+```
+
+The important piece of code is the function `get_cluster_hosts()`, which is in charge on ask for all the available nodes with that alias to the DNS.
+
+``` Elixir
+  def get_cluster_hosts() do
+    case :inet.gethostbyname(:web) do
+      {:ok, {:hostent, 'web', [], :inet, 4, hosts_ip}} ->
+        Enum.map(hosts_ip, fn ip ->
+          {:ok, {:hostent, hostname, [], :inet, 4, _ips}} = :inet.gethostbyaddr(ip)
+
+          String.to_atom("node@" <> normalize_hostname(hostname))
+        end)
+
+      error ->
+        raise "Unexpected #{inspect(error)}"
+    end
+  end
+```
+
+Another auxiliary function has been added `normalize_hostname` because when retrieving the hostname of some dockers this hostname contains the `--net-alias` as part of it. This can cause confusion on libcluster so it was needed to remove it.
+
+``` Elixir
+  def normalize_hostname(hostname) do
+    hostname
+    |> to_string()
+    |> String.split(".net_poc")
+    |> List.first()
+  end
+end
+```
+
+Once we have modified the code, we need to rebuild the docker:
+
+``` Bash
+docker build -t libcluster .
+```
+
 
 
 Let's launch the first node:
@@ -420,10 +493,16 @@ And the third one:
 
 ``` elixir
 $ NODE=node3; docker run -it --net net_poc --hostname $NODE --net-alias web --name $NODE --entrypoint=iex libcluster_poc --cookie cookie --sname node@$NODE -S mix
-Interactive Elixir (1.9.4) - press Ctrl+C to exit (type h() ENTER for help) 
+Interactive Elixir (1.9.4) - press Ctrl+C to exit (type h() ENTER for help).
 
 22:22:51.408 [info]  [libcluster:example] connected to :node@node1
 22:22:51.408 [info]  [libcluster:example] connected to :node@node2
 iex(node@node3)1> Node.list)()
 [:node@node1, :node@node2]
 ```
+
+We can see how each new host is automatically connected to the others.
+
+# Final thoughts
+At this post an interesting approach to get autodiscovery nodes has been exposed but in each scenario we should analyze which could be the best option. For example, If we were working with Kubernetes probably we can find another way to approach the problem making use of some builtin features. Libcluser offers a strategy related to [kubernetes](https://github.com/bitwalker/libcluster/blob/master/lib/strategy/kubernetes.ex).
+

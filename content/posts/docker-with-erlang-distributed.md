@@ -45,7 +45,7 @@ This means that the nodes are not connected yet. it is needed to require to get 
 
 ```Elixir
 Node2
-> Node.connect()
+> Node.connect([:"node1@jkmrto-XPS-15-9570"])
 true
 ```
 

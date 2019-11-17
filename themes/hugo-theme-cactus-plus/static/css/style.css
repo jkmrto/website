@@ -239,11 +239,15 @@ h2 {
     color: #bbb;
 }
 
+
+
+
+
 .profile {
     padding: 60px 40px 0px;
     max-width: 600px;
     margin: 0 auto;
-    text-align: center
+    text-align: center;
 }
 
 .profile #header {

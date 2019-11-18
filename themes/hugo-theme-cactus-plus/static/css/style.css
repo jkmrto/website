@@ -240,9 +240,6 @@ h2 {
 }
 
 
-
-
-
 .profile {
     padding: 60px 40px 0px;
     max-width: 600px;
@@ -1030,7 +1027,7 @@ a.symbol:hover {
     font-family: 'Menlo', 'Monaco', Courier, monospace;
     background-color: #333;
     border-radius: 30px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 #TableOfContents {

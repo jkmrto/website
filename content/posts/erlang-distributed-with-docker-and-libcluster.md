@@ -14,7 +14,7 @@ weight: 10
 
 # Motivation
 
-Last days I have been diving a little into the wonderful world of Erlang distributed. Elixir, has some built-in constructs for distributed systems which make it easier to distribute systems in comparison with other programming paradigms.
+Last days I have been diving a little into the wonderful world of Erlang distributed. Elixir, has some built-in constructs for distributed systems which makes easier to distribute systems in comparison with other programming paradigms.
 
 Since Erlang is based on the actor model (where each actor is a process) it is transparent to erlang if the actor is local or if it is in a remote host, as long as the nodes are connected.
 
@@ -198,9 +198,9 @@ name node1 at port 45015
 ```
 
 
-## Executing three instances dockerized
+# Connecting three instances dockerized
 
-### Dockerizing the poc
+## Dockerizing the application
 
 Let's use this simple dockerfile:
 
@@ -245,7 +245,7 @@ Interactive Elixir (1.9.4) - press Ctrl+C to exit (type h() ENTER for help)
 iex(1)> 
 ```
 
-### Using docker network
+## Using docker network
 
 Once we have our docker defined, we need to start think about how to have some of them connected. Let's now use an internal docker net, avoiding using the `--net=host` trick.
 
@@ -255,7 +255,7 @@ Let's create the network, calling it `net_poc`:
 docker network create net_poc 
 ```
 
-### Custom docker run
+## Custom docker run
 
 Let's run our docker instances. We are going to need some options in order to get the expected behaviour.
 
@@ -303,7 +303,7 @@ Great! We have are two docker fully connected.
 
 It is important to note that the nodes are not connected when starting them and they get connected when doing `Node.ping/1`. The next step is getting them connected at startup.
 
-### Automatically connection with libcluster.
+## Automatic connection with libcluster
 
 We just need to redefine the nodes at libcluster topologies to get nodes automatically connected at start.
 
@@ -346,9 +346,7 @@ Let's run our dockers:
 
 Wonderful! Now our two nodes are connected at start up thanks to libcluster. 
 
-
-
-# Connecting Dockers using DNS autodiscovery.
+# Connecting Dockers using DNS autodiscovery
 
 Until now we have been forced to explicitly indicate which are the nodes that are going to be connected in the configuration of libcluster.
 

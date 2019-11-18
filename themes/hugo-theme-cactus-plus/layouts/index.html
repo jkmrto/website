@@ -1,26 +1,20 @@
 	{{ partial "head.html" . }}
 
-        <div class="row"; style="background-image: url('css/wallpaper3.jpg'); background-position:center;">
+     <div class="row"; style="background-image: url('css/wallpaper3.jpg'); background-position:center;">
         <div class="col-md-3"></div>
         <div class="col-md-6"; style="background-color: white ">
             <body>
             {{ partial "nav.html" . }}
-
             {{ partial "profile.html" . }}
-
             <section id="wrapper" class="home">
                 {{ partial "post-list.html"  . }}
                 {{ partial "pagination.html" . }}
                 {{ partial "footer.html"     . }}
             </section>
-
             {{ partial "js.html" . }}
             </body></div>
-
-
-
         <div class="col-md-3"></div>
-        </div> 
+     </div> 
 
 </html>
 

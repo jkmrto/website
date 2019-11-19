@@ -1,6 +1,10 @@
 {{ partial "head.html" . }}
 	<body>
-	{{ partial "nav.html" . }}
+ <div class="row"; style="background-image: url('../img/wallpaper.jpg'); background-position:center;">
+        <div class="col-md-3"></div>
+        <div class="col-md-6"; style="background-color: white ">
+            
+		{{ partial "nav.html" . }}
 	{{ partial "profile.html" . }}
 
 	<section id="wrapper" class="home">
@@ -26,5 +30,8 @@
 	</div>
 
 	{{ partial "js.html" . }}
+		
+		</div>
+        <div class="col-md-3"></div></div> 	
 	</body>
 </html>

@@ -1,11 +1,11 @@
 ---
 author: "Juan Carlos Martinez de la Torre"
 date: 2019-03-23
-linktitle: transient-supervisor 
+linktitle: elixir-transient-supervisor 
 menu:
   main:
     parent: tutorials
-title: Transient Supervisor I
+title: Elixir Transient Supervisor
 weight: 10
 ---
 

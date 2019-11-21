@@ -1,27 +1,18 @@
 {{ partial "head.html" . }}
 
-     <div class="row"; style="background-image: url('../img/wallpaper.jpg'); background-position:center;">
-        <div class="col-md-3"></div>
-        <div class="col-md-6"; style="background-color: white ">
-            <body>
-{{ partial "nav.html" . }}
-{{ partial "profile-about.html" . }}
+<div class="row" ; style="background-image: url('../img/wallpaper.jpg'); background-position:center;">
+    <div class="col-md-3"></div>
+    <div class="col-md-6" ; style="background-color: white ">
 
-<section id="wrapper" class="home">
-    {{ .Content }}
+        <body>
+            {{ partial "nav.html" . }} {{ partial "profile-about.html" . }}
 
-    {{ if .Site.Params.enableDisqus }}
-        {{ if ne .Params.disabledisqus "true" }}
-            {{ partial "disqus.html" . }}
-        {{ end }}
-    {{ end }}
+            <section id="wrapper" class="home">
+                {{ .Content }} {{ if .Site.Params.enableDisqus }} {{ if ne .Params.disabledisqus "true" }} {{ partial "disqus.html" . }} {{ end }} {{ end }} {{ partial "footer.html" . }}
+            </section>
 
-    {{ partial "footer.html" . }}
-</section>
-
-{{ partial "js.html" . }}
-</body>
+            {{ partial "js.html" . }}
+        </body>
+    </div>
+    <div class="col-md-3"></div>
 </div>
-        <div class="col-md-3"></div>
-     </div> 
-

@@ -8,7 +8,7 @@ menu:
 next: /tutorials/github-pages-blog
 prev: /tutorials/automated-deployments
 title: Api Rest With Cowboy
-description: This tutorial will show you how to create a simple theme in Hugo.
+description: This tutorial will explain how to create a simple API REST with cowboy(plug_cowboy)
 weight: 10
 ---
 

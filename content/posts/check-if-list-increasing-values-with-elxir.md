@@ -1,6 +1,6 @@
 ---
 author: "Juan Carlos Martinez de la Torre"
-date: 2019-10-30
+date: 2019-12-09
 linktitle: check-a-list-is-increasing-in-elixir
 menu:
   main:

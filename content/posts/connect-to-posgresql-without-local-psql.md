@@ -1,6 +1,6 @@
 ---
 author: "Juan Carlos Martinez de la Torre"
-date: 2019-10-30
+date: 2019-11-26
 linktitle: connect-to-remote-postgresql-without-local-psql
 menu:
   main:

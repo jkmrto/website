@@ -8,49 +8,60 @@
 
 
 <url>
-  <loc>https://jkmrto.netlify.com/posts/connect-to-posgresql-without-local-psql/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
+  <loc>https://www.jkmrto.dev/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://jkmrto.netlify.com/posts/erlang-distributed-with-docker-and-libcluster/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://jkmrto.netlify.com/posts/elixir-transient-supervisor/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://jkmrto.netlify.com/posts/dynamic-supervisor-in-elixir/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://jkmrto.netlify.com/posts/api-rest-with-cowboy/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
+  <loc>https://www.jkmrto.dev/posts/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://jkmrto.netlify.com/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>1.00</priority>
+  <loc>https://www.jkmrto.dev/about/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://jkmrto.netlify.com/posts/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>0.20</priority>
+  <loc>https://www.jkmrto.dev/contact/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://jkmrto.netlify.com/about/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>0.20</priority>
+  <loc>https://www.jkmrto.dev/posts/some-thoughts-about-my-first-steps-with-vim/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://jkmrto.netlify.com/contact/</loc>
-  <lastmod>2019-11-26T21:05:35+00:00</lastmod>
-  <priority>0.20</priority>
+  <loc>https://www.jkmrto.dev/posts/check-if-list-increasing-values-with-elxir/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
+<url>
+  <loc>https://www.jkmrto.dev/posts/connect-to-posgresql-without-local-psql/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.jkmrto.dev/posts/erlang-distributed-with-docker-and-libcluster/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.jkmrto.dev/posts/elixir-transient-supervisor/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.jkmrto.dev/posts/dynamic-supervisor-in-elixir/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.jkmrto.dev/posts/api-rest-with-cowboy/</loc>
+  <lastmod>2020-03-27T20:59:44+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
 
 </urlset>

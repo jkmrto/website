@@ -39,7 +39,7 @@ Something you have to avoid is to open a new vim (in my case it is neovim) insta
 
 As it is explained at the Readme of this plugin, when running `nvim` a server is started for Neovim and what this plugin allows is that runnig `nvr` the Neovim instance will get connected to this server instead of running another one.
 
-### FZF
+### FZF (Fuzzy Finder)
 
 This plugin allows searching files blazingly fast. Got used to VSCode and the `Ctrl + P` command to look for a file and open it, this FZF plugin fulfills the same task.
 

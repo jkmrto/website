@@ -2,7 +2,7 @@
 baseurl = "https://www.jkmrto.dev/"
 languageCode = "en"
 title = "Jkmrto Website"
-theme = "hugo-theme-cactus-plus"
+theme = "../theme"
 googleAnalytics = "your_google_analytics_id"
 # Set the value to true if your site include CJK (Chinese, Japanese, and Korean languages) characters
 hasCJKLanguage = false
@@ -46,7 +46,7 @@ enableInlineShortcodes = true
 
 	# Navigation links
 	home = ""
-	about = "About"
+	about = "Resume"
 	archive = ""
 	subscribe = ""
 

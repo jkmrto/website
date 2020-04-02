@@ -1,0 +1,54 @@
+.badge {
+ 	background-color:#0091ff;
+ 	border-radius:.75em;
+ 	color:#fff;
+ 	display:inline-block;
+ 	font-size:10.25pt;
+ 	font-weight:700;
+ 	padding:.3em .65em;
+ 	text-decoration:none
+}
+
+.exp-desc {
+ 	font-size:14pt;
+}
+
+body{
+	font-family: gardana;
+}
+
+ul>li{
+	list-style-type: none;
+}
+
+#photo {
+ width:100%;
+ max-width:512px;
+ border-radius:5%;
+}
+
+#summary{
+ margin-bottom: 50px;
+ margin-top: 50px;
+}
+
+#name{
+ font-size:30px;
+ font-family: gardana;
+}
+
+.date {
+ display:inline-block;
+ font-weight:700;
+ padding:0
+}
+
+.icon {
+ height:24px;
+ width:24px;
+ vertical-align:middle
+}
+
+.exp-il {
+ margin-bottom: 50px
+}
